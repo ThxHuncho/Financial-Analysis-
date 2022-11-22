@@ -1,0 +1,4 @@
+streamlit
+pandas_datareader==0.10.0
+plotly==5.2.2
+cufflinks==0.17.3
