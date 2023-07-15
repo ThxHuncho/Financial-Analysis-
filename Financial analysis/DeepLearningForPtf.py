@@ -114,12 +114,12 @@ class Model:
         
         model = Sequential()
         
-        model.add(LSTM(100, input_shape=input_shape,return_sequences=True))
+        model.add(LSTM(64, input_shape=input_shape))
         #model.add(LSTM(100, return_sequences=True))
         #model.add(LSTM(100, return_sequences=True))
         #model.add(LSTM(100, return_sequences=True))
-        model.add(LSTM(100, return_sequences=True))
-        model.add(LSTM(100, return_sequences=False))
+        #model.add(LSTM(100, return_sequences=True))
+        #model.add(LSTM(100, return_sequences=False))
         model.add(Flatten()) 
         model.add(Dense(outputs, activation='softmax')) 
         
