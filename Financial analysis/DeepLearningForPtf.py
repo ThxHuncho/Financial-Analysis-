@@ -73,13 +73,13 @@ symbol_selections = st.sidebar.multiselect("Select your asset", options=symbols,
 
 #---------------------------------------- Method
 
-st.sidebar.subheader("Backtesting period")
+st.sidebar.subheader("Choose your period")
 start_date = st.sidebar.date_input('Start date', datetime.datetime(2010, 1, 1))
-end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
+end_date = st.sidebar.date_input('End date', datetime.datetime(2020,12,31))
 
 #---------------------------------------- Data for Optimization 
 df = filter_data(symbol_selections,start_date,end_date)
-df = df['Close']
+df = df['Adjusted Close']
 #---------------------------------------- Analysis 
 #df normed
 st.subheader("Normed return")
@@ -228,17 +228,17 @@ st.subheader("Return - Volatility - Shape Ratio")
 #df_summ = pd.DataFrame(get_ret_vol_sr(coef),index=['Return','Volatility','Shape Ratio'])
 #df_res=pd.concat(summ_M,df_summ)
 
-d={'MKV':list(get_ret_vol_sr(opt_results.x)),'DLS':list(get_ret_vol_sr(coef))}
+d={'MKV':list(get_ret_vol_sr(opt_results.x)),'DLS':list(round(get_ret_vol_sr(coef),2))}
 df_rvs = pd.DataFrame(data=d)
 st.dataframe(df_rvs)
 
 #---------------------------------------- Backtesting_Mkv
 
-st.subheader("Backtesting with 1000$")
+st.subheader("Result on trainning period")
 
 allocation_M=list(opt_results.x)
 alloc_M=df_normed*allocation_M
-pos_M=alloc_M*1000
+pos_M=alloc_M*1
 pos_t_M=pos_M.sum(axis=1)
 
     
@@ -246,14 +246,29 @@ pos_t_M=pos_M.sum(axis=1)
 
 allocation_D=list(coef)
 alloc_D=df_normed*allocation_D
-pos_D=alloc_D*1000
+pos_D=alloc_D*1
 pos_t_D=pos_D.sum(axis=1)
 
 Pos=pd.DataFrame({"MKV":pos_t_M,"DLS":pos_t_D})
 st.line_chart(Pos)
 
+st.subheader("Result on Testing period")
+#---------------------------------------- Data for test
 
+df_test = filter_data(symbol_selections,'2021-01-01','2023-06-30')
+df_test = df_test['Adjusted Close']
+df_normed_test = df_test/df_test.iloc[0]
 
+alloc_M_test=df_normed_test*allocation_M
+pos_M_test=alloc_M_test*1
+pos_t_M_test=pos_M.sum(axis=1)
+
+alloc_D_test=df_normed_test*allocation_D
+pos_D_test=alloc_D_test*1
+pos_t_D_test=pos_D_test.sum(axis=1)
+
+Pos_test=pd.DataFrame({"MKV":pos_t_M_test,"DLS":pos_t_D_test})
+st.line_chart(Pos_test)
 
 
 
