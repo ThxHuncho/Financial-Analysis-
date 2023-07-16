@@ -255,7 +255,7 @@ st.line_chart(Pos)
 st.subheader("Result on Testing period")
 #---------------------------------------- Data for test
 
-df_test = filter_data(symbol_selections,'2021-01-01','2023-06-30')
+df_test = yf.download(symbol_selections,'2021-01-01','2023-06-30')
 df_test = df_test['Adjusted Close']
 df_normed_test = df_test/df_test.iloc[0]
 
